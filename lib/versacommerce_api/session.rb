@@ -4,6 +4,7 @@ module VersacommerceAPI
   class Session
     cattr_accessor :api_key
     cattr_accessor :secret
+    cattr_accessor :password
     cattr_accessor :protocol
     self.protocol = 'https'
 
@@ -69,6 +70,7 @@ module VersacommerceAPI
     # secret = shared_key
     # token  was provided by registration
     def computed_password
+      return self.password if self.password.present?
       Digest::MD5.hexdigest(secret + token.to_s)
     end
 
