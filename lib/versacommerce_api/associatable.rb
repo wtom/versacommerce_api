@@ -4,13 +4,12 @@ module VersacommerceAPI
   module Associatable
     def associated_resource association, pluralize=true
       association = association.pluralize if pluralize
-
+    
       if self.new? or attributes[association]
         attributes[association]
       else
         # dont create traffic if we know already there are no associated records...
-        # doesn't work, because some fields always show 0
-        # return [] if self.respond_to?("#{association}_count") && self.send("#{association}_count") == 0 && pluralize
+        return [] if self.respond_to?("#{association}_count") && self.send("#{association}_count") == 0 && pluralize
         klass = "VersacommerceAPI::#{association.classify}".constantize
         # ensure we don´t have the association already included
         attributes[association] ||= begin
