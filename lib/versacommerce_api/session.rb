@@ -32,7 +32,7 @@ module VersacommerceAPI
     def self.request_token(domain)
       return nil if domain.blank? || api_key.blank?
       begin
-        content = open("#{protocol}://#{domain}/api/auth.xml?api_key=#{api_key}") { |io| data = io.read }
+        content = URI.open("#{protocol}://#{domain}/api/auth.xml?api_key=#{api_key}") { |io| data = io.read }
         Hash.from_xml(content)["token"] if content
       rescue
         nil
