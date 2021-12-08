@@ -4,6 +4,10 @@ module VersacommerceAPI
   class Shipment < Base
     include Associatable
     
+    def self.root!
+      self.prefix = "/api/"
+    end
+
     def order
       associated_resource "order", false
     end
