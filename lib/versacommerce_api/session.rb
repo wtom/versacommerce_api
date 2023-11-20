@@ -35,7 +35,7 @@ module VersacommerceAPI
     def self.request_token(domain)
       return nil if domain.blank? || api_key.blank?
       begin
-        uri = URI("https://#{domain}/api/auth.xml?api_key=#{api_key}")
+        uri = URI("#{protocol}://#{domain}/api/auth.xml?api_key=#{api_key}")
         res = Net::HTTP.get_response(uri)
         Hash.from_xml(res.body)["token"] if res&.body
       rescue
