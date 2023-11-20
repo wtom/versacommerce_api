@@ -6,9 +6,6 @@ require 'active_support/core_ext/class/attribute_accessors'
 require 'digest/md5'
 require 'base64'
 require 'yaml'
-require 'active_resource/json_errors'
-require 'active_resource/disable_prefix_check'
-require 'active_resource/base_ext'
 
 module VersacommerceAPI
   # Your code goes here...

@@ -1,4 +1,6 @@
 # -*- encoding : utf-8 -*-
+require 'uri'
+require 'net/http'
 module VersacommerceAPI
 
   class Session
@@ -6,6 +8,7 @@ module VersacommerceAPI
     cattr_accessor :secret
     cattr_accessor :password
     cattr_accessor :protocol
+    cattr_accessor :domain
     self.protocol = 'https'
 
     attr_accessor :url, :token, :name
@@ -32,12 +35,23 @@ module VersacommerceAPI
     def self.request_token(domain)
       return nil if domain.blank? || api_key.blank?
       begin
-        content = URI.open("#{protocol}://#{domain}/api/auth.xml?api_key=#{api_key}") { |io| data = io.read }
-        Hash.from_xml(content)["token"] if content
+        uri = URI("https://#{domain}/api/auth.xml?api_key=#{api_key}")
+        res = Net::HTTP.get_response(uri)
+        Hash.from_xml(res.body)["token"] if res&.body
       rescue
         nil
       end
     end
+
+    def self.get_password
+      return nil if domain.blank? || api_key.blank? || secret.blank?
+
+      token = request_token(domain)
+      return if token.blank?
+
+      Digest::MD5.hexdigest(secret + token)
+    end
+
 
 
     def shop
